@@ -1,0 +1,18 @@
+{
+  "description": "",
+  "scripts": {
+    "build": "rimraf ./build && tsc",
+    "start": "npm run build && node build/index.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.6",
+    "@types/readline-sync": "^1.4.8",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.4.4"
+  },
+  "dependencies": {
+    "axios": "^1.6.8",
+    "dotenv": "^16.4.5",
+    "readline-sync": "^1.4.10"
+  }
+}
