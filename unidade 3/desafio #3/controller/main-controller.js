@@ -85,7 +85,7 @@ class MainController{
         await presenter.run();
     }
 
-    listarAgenda() {
+    async listarAgenda() {
         // Cria o controller
         const controller = new ListagemAgendaController();
 
@@ -94,7 +94,7 @@ class MainController{
         const presenter = new ListagemAgendaPresenter(controller);
 
         // Presenter assume a execução
-        presenter.run();
+        await presenter.run();
     }
 }
 
