@@ -13,7 +13,7 @@ class ListagemPacienteView{
             const idade = CalculoIdade(paciente.dataNascimento)
             console.log(`${paciente.cpf.padEnd(11, ' ')} ${paciente.nome.padEnd(15, ' ')} ${FormateDate(paciente.dataNascimento).padEnd(16, ' ')} ${idade.toString()}`);
             if(agendamentosFuturos){
-                console.log(`           Agendado para: ${agendamentosFuturos.dataConsulta}`);
+                console.log(`           Agendado para: ${FormateDate(agendamentosFuturos.dataConsulta)}`);
                 console.log(`           ${agendamentosFuturos.horaInicial.slice(0, 2)}:${agendamentosFuturos.horaInicial.slice(2, 4)} às ${agendamentosFuturos.horaFinal.slice(0, 2)}:${agendamentosFuturos.horaFinal.slice(2, 4)}`);
             }
            
