@@ -271,32 +271,61 @@ class Agenda extends Model {
         return null
     }
 
-    /*
+    static async listarAgenda(opcao, dataInicial = null, dataFinal = null) {
+        const agenda = await Agenda.findAll();
+        const dicionario = {};
     
-    getAgendamentosFuturosPorCpf(cpf){
-        
-
-        for(let agendamento of this.#agenda){
-            if(agendamento.paciente.cpf === cpf && agendamento.agendamentoFuturo()){
-                return agendamento
+        const consultasPromises = agenda.map(async consulta => {
+            const dataFormatada = FormateDate(consulta.dataConsulta).split("/").reverse().join("-");
+    
+            if (opcao == 'P' && dataInicial && dataFinal) {
+                const dateConsulta = new Date(dataFormatada);
+                const dataInicialFormatada = new Date(dataInicial.split("/").reverse().join("-"));
+                const dataFinalFormatada = new Date(dataFinal.split("/").reverse().join("-"));
+                if (dateConsulta < dataInicialFormatada || dateConsulta > dataFinalFormatada) {
+                    return;
+                }
             }
-        }
-
-        return null
+    
+            const horaInicialFormatada = consulta.horaInicial.slice(0, 2) + ":" + consulta.horaInicial.slice(2, 4);
+            const horaFinalFormatada = consulta.horaFinal.slice(0, 2) + ":" + consulta.horaFinal.slice(2, 4);
+    
+            let duracaoHoras = parseInt(horaFinalFormatada.slice(0, 2)) - parseInt(horaInicialFormatada.slice(0, 2));
+            if (parseInt(horaFinalFormatada.slice(3, 5)) < parseInt(horaInicialFormatada.slice(3, 5))) {
+                duracaoHoras -= 1;
+            }
+            if (duracaoHoras >= 0 && duracaoHoras < 10) {
+                duracaoHoras = "0" + duracaoHoras;
+            }
+    
+            let duracaoMinutos = Math.abs(parseInt(horaFinalFormatada.slice(3, 5)) - parseInt(horaInicialFormatada.slice(3, 5)));
+            if (duracaoMinutos >= 0 && duracaoMinutos < 10) {
+                duracaoMinutos = "0" + duracaoMinutos;
+            }
+    
+            const duracaoFormatada = duracaoHoras + ":" + duracaoMinutos;
+            
+            const dataFormatadaBr = dataFormatada.split("-")
+            if (!dicionario[`${dataFormatadaBr[2]}/${dataFormatadaBr[1]}/${dataFormatadaBr[0]}`]) {
+                dicionario[`${dataFormatadaBr[2]}/${dataFormatadaBr[1]}/${dataFormatadaBr[0]}`] = [];
+            }
+    
+            const paciente = await Pacientes.findOne({ where: { id: consulta.PacienteId } });
+            dicionario[`${dataFormatadaBr[2]}/${dataFormatadaBr[1]}/${dataFormatadaBr[0]}`].push({ nome: paciente.nome, dataNascimento: FormateDate(paciente.dataNascimento), horaInicial: horaInicialFormatada, horaFinal: horaFinalFormatada, duracao: duracaoFormatada });
+        });
+    
+        await Promise.all(consultasPromises);
+    
+        return dicionario;
     }
     
+
     
-    */
 
 
     
 }
-/*
-    paciente
-    dataConsulta
-    horaInicial
-    horaFinal
-    */
+
 
 Agenda.init({
     
