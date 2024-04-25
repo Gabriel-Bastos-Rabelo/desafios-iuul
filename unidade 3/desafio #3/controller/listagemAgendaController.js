@@ -1,9 +1,10 @@
 const session = require("../session/session");
 
 class ListagemAgendaController{
-    listarAgenda(opcao, dataInicial = null, dataFinal = null){
-       
-        return session.Consultorio.listarAgenda(opcao, dataInicial, dataFinal)
+    async listarAgenda(opcao, dataInicial = null, dataFinal = null){
+        
+        const agenda = await session.Consultorio.listarAgenda(opcao, dataInicial, dataFinal)
+        return agenda
 
     }
 }
