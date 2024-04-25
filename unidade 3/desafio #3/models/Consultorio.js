@@ -62,7 +62,7 @@ class Consultorio{
         const resultado = []; 
         const pacientesOrdenados = await this.#pacientes.listarPorNome();
         for (let paciente of pacientesOrdenados) {
-            const consultas = this.#agenda.getAgendamentosFuturosPorCpf(paciente.cpf);
+            const consultas = await this.#agenda.getAgendamentosFuturosPorCpf(paciente.cpf);
             const pacienteComAgendamentos = {
                 paciente: paciente,
                 agendamentosFuturos: consultas
@@ -80,7 +80,7 @@ class Consultorio{
         const resultado = []; 
         const pacientesOrdenados = await this.#pacientes.listarPorCPF();
         for (let paciente of pacientesOrdenados) {
-            const consultas = this.#agenda.getAgendamentosFuturosPorCpf(paciente.cpf);
+            const consultas = await this.#agenda.getAgendamentosFuturosPorCpf(paciente.cpf);
             const pacienteComAgendamentos = {
                 paciente: paciente,
                 agendamentosFuturos: consultas
@@ -98,8 +98,9 @@ class Consultorio{
         return paciente
     }
 
-    listarAgenda(opcao, dataInicial = null, dataFinal = null){
-        return this.#agenda.listarAgenda(opcao, dataInicial, dataFinal)
+    async listarAgenda(opcao, dataInicial = null, dataFinal = null){
+        const agenda = await this.#agenda.listarAgenda(opcao, dataInicial, dataFinal)
+        return agenda
     }
 
     async cancelarAgendamento(dataConsulta, horaInicial){
